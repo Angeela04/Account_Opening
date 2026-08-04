@@ -1,0 +1,35 @@
+import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.goto('http://localhost:8080/synergy/faces/login.xhtml');
+  await page.getByRole('textbox', { name: 'Username' }).click();
+  await page.getByRole('textbox', { name: 'Username' }).fill('p01');
+  await page.getByRole('textbox', { name: 'Username' }).press('Tab');
+  await page.getByRole('textbox', { name: 'Password' }).press('CapsLock');
+  await page.getByRole('textbox', { name: 'Password' }).fill('C');
+  await page.getByRole('textbox', { name: 'Password' }).press('CapsLock');
+  await page.getByRole('textbox', { name: 'Password' }).fill('Cbb@2015');
+  await page.getByRole('textbox', { name: 'Password' }).press('Tab');
+  await page.getByRole('button', { name: 'Login' }).press('Enter');
+  await page.getByRole('button', { name: 'Login' }).click();
+  await page.getByRole('link', { name: 'Member', exact: true }).click();
+  await page.getByRole('gridcell').nth(5).click();
+  await page.getByRole('button', { name: ' Accounts' }).click();
+  await page.getByRole('button', { name: 'ui-button', description: 'Create [Alt+c]' }).click();
+  await page.locator('[id="createForm:savingProduct_label"]').click();
+  await page.locator('[id="createForm:savingProduct_filter"]').fill('eds');
+  await page.locator('[id="createForm:savingProduct_12"]').click();
+  await page.locator('[id="createForm:staffInp_label"]').click();
+  await page.getByRole('group', { name: 'Irregular Saving' }).click();
+  await page.locator('[id="createForm:sourceOfIncomeInp_label"]').click();
+  await page.locator('[id="createForm:sourceOfIncomeInp_1"]').click();
+  await page.getByRole('textbox', { name: 'Max. Amount Per Trans. (' }).click();
+  await page.getByRole('textbox', { name: 'Max. Amount Per Trans. (' }).press('Tab');
+  await page.getByRole('textbox', { name: 'Yearly Txn. Amount (approx' }).press('Tab');
+  await page.locator('[id="createForm:inp_num_annual_txn_no_input"]').press('Tab');
+  await page.getByRole('textbox', { name: 'Monthly Txn. Amount (approx.)*' }).press('Tab');
+  await page.locator('[id="createForm:inp_num_mon_txn_no_input"]').press('Tab');
+  await page.getByRole('button', { name: 'Save' }).press('Enter');
+  await page.getByRole('button', { name: 'Save' }).click();
+  await page.getByRole('button', { name: 'Save' }).click();
+});
