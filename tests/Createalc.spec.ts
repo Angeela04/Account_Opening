@@ -8,7 +8,7 @@ import { checkMessage } from './utils/checkMessage';
 const csvPath = path.join(__dirname, 'data', 'login-data.csv');
 const fileContent = fs.readFileSync(csvPath, 'utf-8');
 
-const records: { testCaseId: string; module: string; username: string; password: string; expectedMessage: string }[] =
+const records: { testCaseId: string; module: string; testCaseName: string; memberCode: string; username: string; password: string; expectedMessage: string }[] =
   parse(fileContent, {
     columns: true,
     skip_empty_lines: true,
@@ -19,19 +19,20 @@ const accountRows = records.filter(r => r.module === 'account');
 
 for (const row of accountRows) {
   test(`${row.testCaseId} - ${row.expectedMessage}`, async ({ page }) => {
-    await login(page, 'p01', 'Cbb@2015');
+    await login(page, 'k02', 'Cbb@2015');
 
     await page.getByRole('link', { name: 'Client', exact: true }).click();
     await page.getByRole('link', { name: 'Client', exact: true }).click();
     await page.getByRole('link', { name: 'Client', exact: true }).click();
     await page.getByRole('link', { name: 'Client', exact: true }).click();
     await page.getByRole('link', { name: 'Member', exact: true }).click();
-    await page.getByRole('gridcell').filter({ hasText: /^$/ }).nth(3).click();
+    const memberRow = page.getByRole('row').filter({ hasText: row.memberCode });
+
+    await memberRow.locator('td').first().click();
     await page.getByRole('button', { name: ' Accounts' }).click();
     await page.getByRole('button', { name: 'ui-button', description: 'Create [Alt+c]' }).click();
 
     await page.locator('[id="createForm:savingProduct_label"]').click();
-    await page.locator('[id="createForm:savingProduct_filter"]').fill('eds');
     await page.locator('[id="createForm:savingProduct_12"]').click();
 
     await page.locator('[id="createForm:sourceOfIncomeInp_label"]').click();
@@ -46,11 +47,18 @@ for (const row of accountRows) {
 
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await checkMessage(page, row.testCaseId, row.expectedMessage);
+    await checkMessage(page, row.testCaseId, row.testCaseName, row.expectedMessage);
 
-    await page.waitForURL(/CreateAccount\/List\.xhtml/);
-    const closeBtn = page.getByRole('button', { name: 'Close' });
-    await closeBtn.waitFor({ state: 'visible' });
-    await closeBtn.click();
+    if (row.expectedMessage === 'Created Successfully') {
+      // Success case: wait for redirect, then close the confirmation dialog
+      await page.waitForURL(/CreateAccount\/List\.xhtml/);
+      const closeBtn = page.getByRole('button', { name: 'Close' });
+      await closeBtn.waitFor({ state: 'visible' });
+      await closeBtn.click();
+    } else {
+      // Rejection case: already redirected back to account list, nothing more to close
+      await page.waitForURL(/CreateAccount\/List\.xhtml/);
+      console.log(`${row.testCaseId}: Account creation rejected as expected — no Close button needed.`);
+    }
   });
 }

@@ -1,4 +1,6 @@
-testCaseId,module,username,password,expectedMessage
-TC001,login,p01,Cbb@2015,Sucessfully logged in
-TC002,login,p01,okihjiug,Username or Password is incorrect
-TC003,account,,,Created Successfully
+testCaseId,module,testCaseName,memberCode,username,password,expectedMessage
+TC001,login,Verify if login is successful with valid credentials,,k02,Cbb@2015,Sucessfully logged in
+TC002,login,Verify if login is possible if wrong password is entered,,k02,okihjiug,Username or Password is incorrect
+TC003,account,Verify if account is created successfully,14.015.02.4,,,Created Successfully
+TC004,account,Verify if account is created more than one according to the config,14.015.02.4,,,EDS saving account can't be more than 1
+TC004,account,Verify if account is created or not of other mcode,14.015.01.5,,,Created Successfully
