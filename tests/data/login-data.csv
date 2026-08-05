@@ -1,4 +1,4 @@
-testCaseId,    username, password,expectedMessage
-TC001,    p01,Cbb@2015,Sucessfully logged in
-TC002,    p01,okihjiug, Username or Password is incorrect
-TC003,,,Created Successfully
+testCaseId,module,username,password,expectedMessage
+TC001,login,p01,Cbb@2015,Sucessfully logged in
+TC002,login,p01,okihjiug,Username or Password is incorrect
+TC003,account,,,Created Successfully
